@@ -1,3 +1,16 @@
+/*********************************************************************************
+ * MAIN CONTROL UNIT
+ * -------------------------------------------------------------------------------
+ * Think of this module as the "Traffic Cop" of the processor. It looks at the 
+ * 7-bit opcode from the instruction and decides which way the multiplexers should 
+ * flip, whether we should write to a register, or whether we're reading memory!
+ *
+ * ALU_OP MEANINGS (Custom encoding for the ALU Control):
+ *   3'd0 -> I-Type Arithmetic (Look at funct3 to decide operation)
+ *   3'd1 -> B-Type Branch (Force SUB to compare A and B)
+ *   3'd2 -> R-Type Arithmetic (Look at funct7 and funct3 to decide operation)
+ *   3'd3 -> Force ADD (Used for Loads, Stores, AUIPC, LUI, JAL, JALR)
+ *********************************************************************************/
 module control_unit (
     input [6:0] op_code,
 

@@ -1,0 +1,55 @@
+# RISC-V RV32I Processor Makefile
+
+# Compiler
+CC = iverilog
+# Simulation
+SIM = vvp
+
+# Flags
+CFLAGS = -g2012 -Wall
+
+# Source directories
+SRC_CORE = src/core
+SRC_ALU = src/alu
+SRC_MEM = src/memory
+TB_DIR = tb
+
+# Source files
+SOURCES = $(SRC_CORE)/RV32I.v \
+          $(SRC_CORE)/control_unit.v \
+          $(SRC_CORE)/alu_control.v \
+          $(SRC_CORE)/imm_gen.v \
+          $(SRC_CORE)/register.v \
+          $(SRC_ALU)/ALU_n_bit.v \
+          $(SRC_ALU)/full_adder_n_bit.v \
+          $(SRC_MEM)/instruction_mem.v \
+          $(SRC_MEM)/data_mem.v
+
+# Testbenches
+TB_MAIN = $(TB_DIR)/rv32i_tb.v
+TB_DEBUG = $(TB_DIR)/test_lw_sw.v
+
+# Output binaries
+OUT_MAIN = rv32i_sim
+OUT_DEBUG = debug_sim
+
+.PHONY: all compile sim clean debug
+
+all: compile sim
+
+# Compile the main testbench
+compile:
+	$(CC) $(CFLAGS) -o $(OUT_MAIN) $(TB_MAIN) $(SOURCES)
+
+# Run the main simulation
+sim: compile
+	$(SIM) $(OUT_MAIN)
+
+# Compile and run the debug testbench
+debug:
+	$(CC) $(CFLAGS) -o $(OUT_DEBUG) $(TB_DEBUG) $(SOURCES)
+	$(SIM) $(OUT_DEBUG)
+
+# Clean up generated files
+clean:
+	rm -f $(OUT_MAIN) $(OUT_DEBUG) *.vcd

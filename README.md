@@ -16,16 +16,28 @@ Each instruction completes in one clock cycle and the design is split into reusa
 
 ## Repository File Map
 
+The project is organized into modular directories for clarity:
+
+### `src/core/` (CPU Datapath & Control)
 - `RV32I.v`: Top-level module (`rv32i_single_cycle`) with fetch/decode/execute/memory/writeback flow and PC update logic.
-- `rv32i_tb.v`: Basic testbench to clock/reset and run a short simulation.
 - `control_unit.v`: Main decoder generating control signals from opcode.
 - `alu_control.v`: ALU operation decode from `ALU_OP`, `funct3`, and `funct7`.
-- `ALU_n_bit.v`: Parameterized ALU with arithmetic/logical/shift/compare operations.
-- `full_adder_n_bit.v`: Parameterized adder used by the ALU.
 - `imm_gen.v`: Immediate extraction/sign extension for I/S/B/U/J encodings.
 - `register.v`: 32x32 register file (x0 hardwired to zero).
+
+### `src/alu/` (Arithmetic Logic)
+- `ALU_n_bit.v`: Parameterized ALU with arithmetic/logical/shift/compare operations.
+- `full_adder_n_bit.v`: Parameterized adder used by the ALU.
+
+### `src/memory/` (Memory Models)
 - `instruction_mem.v`: Word-addressed instruction memory model.
 - `data_mem.v`: Word-addressed data memory model with sync write/comb read.
+
+### `tb/` (Testbenches)
+- `rv32i_tb.v`: Basic testbench to clock/reset and run the main simulation.
+- `test_lw_sw.v`: Debugging testbench for specific memory operations.
+
+### `docs/` (Documentation)
 - `DATAPATH`: ASCII pipeline-style datapath sketch.
 - `formats.txt`: RISC-V instruction format notes.
 
@@ -55,18 +67,18 @@ Based on the current decoder/ALU implementation:
 
 ## How to Simulate (Icarus Verilog)
 
-### 1) Compile
+This project uses a `Makefile` for automated compilation and simulation.
+
+### 1) Run the Main Simulation
 
 ```bash
-iverilog -g2012 -o rv32i_sim \
-  rv32i_tb.v RV32I.v control_unit.v alu_control.v ALU_n_bit.v \
-  full_adder_n_bit.v imm_gen.v register.v instruction_mem.v data_mem.v
+make all
 ```
+This command compiles all the source files in `src/` along with the main testbench (`tb/rv32i_tb.v`) and executes the simulation, generating a VCD waveform file.
 
-### 2) Run
-
+### 2) Clean Up Binaries
 ```bash
-vvp rv32i_sim
+make clean
 ```
 
 ## Initial Program Loading
@@ -87,16 +99,14 @@ end
 
 - Design is single-cycle, so timing is limited by the longest instruction path.
 - Memory model currently assumes word-aligned accesses.
-- The current testbench is minimal and does not dump waveforms by default.
-- In `rv32i_tb.v`, the DUT instance name appears as `rv31i_single_cycle`; if simulation fails, rename it to `rv32i_single_cycle` to match `RV32I.v`.
+- The testbench generates a waveform file `RV32I_verification.vcd` which can be opened in GTKWave to inspect signal traces.
 
 ## Future Improvements
 
-- Add complete RV32I compliance tests
-- Add byte/halfword load-store support
-- Add waveform dumping (`$dumpfile`, `$dumpvars`)
-- Add synthesis scripts and timing reports
-- Move from single-cycle to pipelined implementation
+- Add complete RISC-V architectural compliance tests.
+- Add byte/halfword load-store support (e.g., `LB`, `LH`, `SB`, `SH`).
+- Add synthesis scripts and timing reports.
+- Transition the datapath from single-cycle to a pipelined or multi-cycle implementation.
 
 ## License
 
