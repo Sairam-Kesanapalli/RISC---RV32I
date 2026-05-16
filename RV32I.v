@@ -132,6 +132,7 @@ module rv32i_single_cycle #(
             3'b101 : branch_taken = ~(negative ^ overflow);
             3'b110 : branch_taken = ~carry_out;
             3'b111 : branch_taken = carry_out; 
+       	    default: branch_taken = 0;
         endcase
     end
 

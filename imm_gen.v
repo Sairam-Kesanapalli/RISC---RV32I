@@ -36,7 +36,7 @@ module imm_gen #(
             // B-TYPE 
             7'b1100011:
                 imm_out = {
-                            {(XLEN-13){instr[31]}},
+                            {{(XLEN-13){instr[31]}}},
                             instr[31],
                             instr[7],
                             instr[30:25],
@@ -56,7 +56,7 @@ module imm_gen #(
             // J-TYPE 
             7'b1101111:                 // JAL
                 imm_out = {
-                            {{XLEN-21}{instr[31]}},
+                            {{(XLEN-21){instr[31]}}},
                             instr[31],
                             instr[19:12],
                             instr[20],
@@ -66,7 +66,7 @@ module imm_gen #(
 
             7'b1100111:
                 imm_out = {
-                            {{XLEN-12}{instr[31]}},
+                            {{(XLEN-12){instr[31]}}},
                             instr[31:20]
                             };
                             
@@ -75,16 +75,3 @@ module imm_gen #(
         endcase
     end
 endmodule
-
-
-
-
-
-
-
-
-
-
-
-
-

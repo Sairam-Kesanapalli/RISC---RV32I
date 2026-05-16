@@ -150,7 +150,7 @@ module ALU_n_bit#(
         //5 for subtracting
      endcase
 
-    zero = (answer == '0);
+    zero = (answer == {WIDTH{1'b0}});
     negative = answer[WIDTH-1];
 
      end

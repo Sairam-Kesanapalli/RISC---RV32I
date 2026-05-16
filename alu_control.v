@@ -58,7 +58,7 @@ localparam SLT = 4'd11;
 		    endcase
 		end
 		
-		3'b3: alu_op = ADD;
+		3'd3: alu_op = ADD;
 		
 		default : alu_op = ADD;
 	    endcase

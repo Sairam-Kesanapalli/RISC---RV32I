@@ -32,7 +32,7 @@ always @(*) begin
             MemToReg = 1;   
             Branch   = 0;
             Jump     = 0;
-            ALU_OP   = 3'd0;
+            ALU_OP   = 3'd3;
         end    
 
         7'b0100011: begin           // S-type SW
@@ -43,7 +43,7 @@ always @(*) begin
             MemToReg = 0;   
             Branch   = 0;
             Jump     = 0;
-            ALU_OP   = 3'd0;
+            ALU_OP   = 3'd3;
         end    
 
         7'b1100011: begin           // B-type BEQ
@@ -76,7 +76,7 @@ always @(*) begin
             MemToReg = 0;   
             Branch   = 0;
             Jump     = 0;
-            ALU_OP   = 3'b3;
+            ALU_OP   = 3'd3;
         end
 
         7'b0010111: begin           // U-TYPE => AUIPC
@@ -87,7 +87,7 @@ always @(*) begin
             MemToReg = 0;   
             Branch   = 0;
             Jump     = 0;
-            ALU_OP   = 3'b3;
+            ALU_OP   = 3'd3;
         end                 
 
         7'b1101111: begin           // J-TYPE
@@ -98,7 +98,7 @@ always @(*) begin
             MemToReg = 0;   
             Branch   = 0;
             Jump     = 1;
-            ALU_OP   = 3'b3;
+            ALU_OP   = 3'd3;
         end
 
         7'b1100111: begin
@@ -109,7 +109,7 @@ always @(*) begin
             MemToReg = 0;   
             Branch   = 0;
             Jump     = 1;
-            ALU_OP   = 3'b3;
+            ALU_OP   = 3'd3;
         end
 
         default: begin
@@ -124,3 +124,4 @@ always @(*) begin
         end
     endcase
 end
+endmodule
