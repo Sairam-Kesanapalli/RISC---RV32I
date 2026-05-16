@@ -110,4 +110,4 @@ end
 
 ## License
 
-No explicit license file is currently present in the repository. Add a license if you plan to distribute or reuse this project publicly.
+MIT
