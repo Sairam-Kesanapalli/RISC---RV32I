@@ -91,7 +91,7 @@ module rv32i_single_cycle #(
         .instr(instr),
         .imm_out(imm_out)
     );
-    
+
     // =========================================================================
     // 4. EXECUTE (ALU)
     // =========================================================================
@@ -105,18 +105,18 @@ module rv32i_single_cycle #(
         .alu_op(alu_op)
     );
 
-    wire [XLEN-1:0] alu_input_b; 
-    wire [XLEN-1:0] alu_input_a; 
+    wire [XLEN-1:0] alu_input_b;
+    wire [XLEN-1:0] alu_input_a;
     wire [XLEN-1:0] alu_result;
     wire zero_flag, carry_out, negative, overflow;
 
     // ALU Input MUX A: Choose between PC (for JAL/AUIPC), 0 (for LUI), or rs1 (default)
-    assign alu_input_a = 
+    assign alu_input_a =
             (Jump)? (PC) :
             (opcode == 7'b0010111)? (PC) :    // AUIPC
             (opcode == 7'b0110111)? 32'b0:    // LUI
              read_data1;
-             
+
     // ALU Input MUX B: Choose between 4 (for JAL), Immediate (I/S/U-types), or rs2 (R-types)
     assign alu_input_b = (Jump)? 32'd4 : (ALUSrc)? (imm_out) : (read_data2);
 
@@ -138,15 +138,15 @@ module rv32i_single_cycle #(
     // =========================================================================
     // 5. MEMORY ACCESS (MEM) & WRITE-BACK (WB)
     // =========================================================================
-    wire [XLEN-1:0] mem_data; 
-    
-    // Memory module for Load/Store operations. 
+    wire [XLEN-1:0] mem_data;
+
+    // Memory module for Load/Store operations.
     // E.g., [SW x8, 4(x2)] => Memory[x2 + 4] = x8
     data_mem dm(
         .clk(clk),
         .MemRead(MemRead),
         .MemWrite(MemWrite),
-        .write_data(read_data2),        
+        .write_data(read_data2),
         .addr(alu_result),
         .read_data(mem_data)
     );
@@ -167,7 +167,7 @@ module rv32i_single_cycle #(
             3'b101 : branch_taken = ~(negative ^ overflow);         // BGE  (Signed)
             3'b110 : branch_taken = ~carry_out;                     // BLTU (Unsigned)
             3'b111 : branch_taken = carry_out;                      // BGEU (Unsigned)
-       	    default: branch_taken = 0;
+            default: branch_taken = 0;
         endcase
     end
 
@@ -175,7 +175,7 @@ module rv32i_single_cycle #(
     // 1. JALR -> (rs1 + imm) & ~1
     // 2. JAL or taken Branch -> PC + imm
     // 3. Normal Execution -> PC + 4
-    assign PC_next = (opcode == 7'b1100111)? (read_data1 + imm_out) & (32'hFFFFFFFE)  : 
+    assign PC_next = (opcode == 7'b1100111)? (read_data1 + imm_out) & (32'hFFFFFFFE)  :
                         ((Jump | (Branch & branch_taken))? (PC + imm_out) : (PC + 4));
 
     // Update the PC sequentially on every clock edge.
@@ -183,7 +183,7 @@ module rv32i_single_cycle #(
         if(!rst_n)
             PC <= 0;
         else
-            PC <= PC_next; 
+            PC <= PC_next;
     end
 
 endmodule

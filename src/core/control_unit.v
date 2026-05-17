@@ -1,8 +1,8 @@
 /*********************************************************************************
  * MAIN CONTROL UNIT
  * -------------------------------------------------------------------------------
- * Think of this module as the "Traffic Cop" of the processor. It looks at the 
- * 7-bit opcode from the instruction and decides which way the multiplexers should 
+ * Think of this module as the "Traffic Cop" of the processor. It looks at the
+ * 7-bit opcode from the instruction and decides which way the multiplexers should
  * flip, whether we should write to a register, or whether we're reading memory!
  *
  * ALU_OP MEANINGS (Custom encoding for the ALU Control):
@@ -21,7 +21,7 @@ module control_unit (
     output reg MemToReg,
     output reg Branch,
     output reg Jump,
-    output reg [2:0] ALU_OP 
+    output reg [2:0] ALU_OP
 );
 
 always @(*) begin
@@ -35,47 +35,47 @@ always @(*) begin
             Branch   = 0;
             Jump     = 0;
             ALU_OP   = 3'd0;
-        end    
+        end
 
         7'b0000011: begin           // I-type LW
             RegWrite = 1;
             MemRead  = 1;
             MemWrite = 0;
-            ALUSrc   = 1;   
-            MemToReg = 1;   
+            ALUSrc   = 1;
+            MemToReg = 1;
             Branch   = 0;
             Jump     = 0;
             ALU_OP   = 3'd3;
-        end    
+        end
 
         7'b0100011: begin           // S-type SW
             RegWrite = 0;
             MemRead  = 0;
             MemWrite = 1;
-            ALUSrc   = 1;   
-            MemToReg = 0;   
+            ALUSrc   = 1;
+            MemToReg = 0;
             Branch   = 0;
             Jump     = 0;
             ALU_OP   = 3'd3;
-        end    
+        end
 
         7'b1100011: begin           // B-type BEQ
             RegWrite = 0;
             MemRead  = 0;
             MemWrite = 0;
-            ALUSrc   = 0;   
-            MemToReg = 0;   
+            ALUSrc   = 0;
+            MemToReg = 0;
             Branch   = 1;
             Jump     = 0;
             ALU_OP   = 3'd1;
-        end  
+        end
 
         7'b0110011: begin           // R-type
             RegWrite = 1;
             MemRead  = 0;
             MemWrite = 0;
-            ALUSrc   = 0;   
-            MemToReg = 0;   
+            ALUSrc   = 0;
+            MemToReg = 0;
             Branch   = 0;
             Jump     = 0;
             ALU_OP   = 3'd2;
@@ -85,8 +85,8 @@ always @(*) begin
             RegWrite = 1;
             MemRead  = 0;
             MemWrite = 0;
-            ALUSrc   = 1;   
-            MemToReg = 0;   
+            ALUSrc   = 1;
+            MemToReg = 0;
             Branch   = 0;
             Jump     = 0;
             ALU_OP   = 3'd3;
@@ -96,19 +96,19 @@ always @(*) begin
             RegWrite = 1;
             MemRead  = 0;
             MemWrite = 0;
-            ALUSrc   = 1;   
-            MemToReg = 0;   
+            ALUSrc   = 1;
+            MemToReg = 0;
             Branch   = 0;
             Jump     = 0;
             ALU_OP   = 3'd3;
-        end                 
+        end
 
         7'b1101111: begin           // J-TYPE
             RegWrite = 1;
             MemRead  = 0;
             MemWrite = 0;
-            ALUSrc   = 1;   
-            MemToReg = 0;   
+            ALUSrc   = 1;
+            MemToReg = 0;
             Branch   = 0;
             Jump     = 1;
             ALU_OP   = 3'd3;
@@ -118,8 +118,8 @@ always @(*) begin
             RegWrite = 1;
             MemRead  = 0;
             MemWrite = 0;
-            ALUSrc   = 0;   
-            MemToReg = 0;   
+            ALUSrc   = 0;
+            MemToReg = 0;
             Branch   = 0;
             Jump     = 1;
             ALU_OP   = 3'd3;
@@ -129,8 +129,8 @@ always @(*) begin
             RegWrite = 0;
             MemRead  = 0;
             MemWrite = 0;
-            ALUSrc   = 0;   
-            MemToReg = 0;   
+            ALUSrc   = 0;
+            MemToReg = 0;
             Branch   = 0;
             Jump     = 0;
             ALU_OP   = 3'd0;
